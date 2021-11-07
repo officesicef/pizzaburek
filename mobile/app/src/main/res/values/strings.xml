@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Scan-IT</string>
+    <string name="scan_qr">Scan QR</string>
+    <string name="scan_it">Scan-IT</string>
+    <string name="last_name">Last name</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="phoneNumber">Phone number</string>
+    <string name="lastName">Last name</string>
+    <string name="spremi">Save</string>
+    <string name="i_m_positive">I\'m positive</string>
+</resources>

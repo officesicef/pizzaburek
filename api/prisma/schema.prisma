@@ -1,0 +1,71 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = "referentialActions"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("CONNECTION_STRING")
+}
+
+model UserHasInstitution {
+  isConfirmed Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        Int
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  institutionId Int
+
+  @@id([userId, institutionId])
+}
+
+model OrganizationAccessHistory {
+  id         Int       @id @default(autoincrement())
+  checkedIn  DateTime  @default(now())
+  checkedOut DateTime?
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        Int
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  institutionId Int
+}
+
+model Report {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId        Int
+  institutionId Int
+
+}
+
+model Institution {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  qrCode    String
+  password  String
+  accessKey String?
+  createdAt DateTime @default(now())
+
+  users                     UserHasInstitution[]
+  organizationAccessHistory OrganizationAccessHistory[]
+}
+
+model User {
+  id                Int      @id @default(autoincrement())
+  firstName         String   @db.VarChar(50)
+  lastName          String   @db.VarChar(50)
+  phoneNumber       String
+  covidConfirmation String?
+  password          String
+  accessKey         String?
+  createdAt         DateTime @default(now())
+  isInfected        Boolean  @default(false)
+
+  institutions              UserHasInstitution[]
+  organizationAccessHistory OrganizationAccessHistory[]
+  report                    Report[]
+}
